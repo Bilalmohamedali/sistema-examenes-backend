@@ -9,26 +9,35 @@ import java.util.Set;
 public class Rol {
 
     @Id
-    private Long id;
-    private String nombre;
+    private Long rolId;
+    private String rolNombre;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "rol")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "rol")
     private Set<UsuarioRol> usuarioRoles = new HashSet<>();
 
-    public Long getId() {
-        return id;
+    public Rol(){
+
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Rol(Long rolId, String rolNombre) {
+        this.rolId = rolId;
+        this.rolNombre = rolNombre;
     }
 
-    public String getNombre() {
-        return nombre;
+    public Long getRolId() {
+        return rolId;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setRolId(Long rolId) {
+        this.rolId = rolId;
+    }
+
+    public String getRolNombre() {
+        return rolNombre;
+    }
+
+    public void setRolNombre(String rolNombre) {
+        this.rolNombre = rolNombre;
     }
 
     public Set<UsuarioRol> getUsuarioRoles() {
@@ -37,9 +46,5 @@ public class Rol {
 
     public void setUsuarioRoles(Set<UsuarioRol> usuarioRoles) {
         this.usuarioRoles = usuarioRoles;
-    }
-
-    public Rol(){
-
     }
 }

@@ -1,5 +1,7 @@
 package com.sistema.examenes.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +26,24 @@ public class Usuario {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usuario")
     private Set<UsuarioRol> usuarioRoles = new HashSet<>();
+    @JsonIgnore
 
+    public Usuario(){
+
+    }
+
+    public Usuario(Long id, String username, String password, String nombre, String apellido, String email, String telefono, Boolean enabled, String perfil, Set<UsuarioRol> usuarioRoles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.telefono = telefono;
+        this.enabled = enabled;
+        this.perfil = perfil;
+        this.usuarioRoles = usuarioRoles;
+    }
 
     public Long getId() {
         return id;
@@ -106,7 +125,5 @@ public class Usuario {
         this.usuarioRoles = usuarioRoles;
     }
 
-    public Usuario(){
 
-    }
 }

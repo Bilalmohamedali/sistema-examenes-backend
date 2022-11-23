@@ -9,13 +9,11 @@ public class UsuarioRol {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long usuarioRolId;
 
-
     @ManyToOne(fetch = FetchType.EAGER)
     private Usuario usuario;
 
     @ManyToOne
     private Rol rol;
-
 
     public Long getUsuarioRolId() {
         return usuarioRolId;
@@ -39,9 +37,5 @@ public class UsuarioRol {
 
     public void setRol(Rol rol) {
         this.rol = rol;
-    }
-
-    public UsuarioRol(){
-
     }
 }
