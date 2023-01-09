@@ -1,14 +1,17 @@
 package com.sistema.examenes.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "usuarios")
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,19 +23,18 @@ public class Usuario {
     private String apellido;
     private String email;
     private String telefono;
-    private Boolean enabled = true;
+    private boolean enabled = true;
     private String perfil;
 
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usuario")
-    private Set<UsuarioRol> usuarioRoles = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "usuario")
     @JsonIgnore
+    private Set<UsuarioRol> usuarioRoles = new HashSet<>();
 
     public Usuario(){
 
     }
 
-    public Usuario(Long id, String username, String password, String nombre, String apellido, String email, String telefono, Boolean enabled, String perfil, Set<UsuarioRol> usuarioRoles) {
+    public Usuario(Long id, String username, String password, String nombre, String apellido, String email, String telefono, boolean enabled, String perfil) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -42,7 +44,6 @@ public class Usuario {
         this.telefono = telefono;
         this.enabled = enabled;
         this.perfil = perfil;
-        this.usuarioRoles = usuarioRoles;
     }
 
     public Long getId() {
@@ -57,8 +58,32 @@ public class Usuario {
         return username;
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<Authority> autoridades = new HashSet<>();
+        this.usuarioRoles.forEach(usuarioRol -> {
+            autoridades.add(new Authority(usuarioRol.getRol().getRolNombre()));
+        });
+        return autoridades;
     }
 
     public String getPassword() {
@@ -101,11 +126,11 @@ public class Usuario {
         this.telefono = telefono;
     }
 
-    public Boolean getEnabled() {
+    public boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -124,6 +149,4 @@ public class Usuario {
     public void setUsuarioRoles(Set<UsuarioRol> usuarioRoles) {
         this.usuarioRoles = usuarioRoles;
     }
-
-
 }
